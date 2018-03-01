@@ -5,6 +5,8 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import './index.css'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 
 class App extends React.Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class App extends React.Component {
   }
 
   sortByLikes = (a, b) => {
-    return parseInt(b.likes) - parseInt(a.likes)
+    return parseInt(b.likes, 10) - parseInt(a.likes, 10)
   }
 
   addBlog = (event) => {
@@ -109,7 +111,7 @@ class App extends React.Component {
 
   addLike = async (blog) => {
     console.log('Lisätään Tykkäys')
-    const updatedBlog = await blogService.update(blog.id, blog)
+    await blogService.update(blog.id, blog)
     /*Voisi hoitaa myös samaantapaan kuin post metodissa, eli populatella*/
     /*Tässä jo user kenttä on pelkkä id, siksi kaikki kusee*/
     /*this.setState({
@@ -161,39 +163,17 @@ class App extends React.Component {
   render() {
     console.log('renderöidään')
     /*const blogs = this.state.blogs.sort(this.sortByLikes)*/
-    const loginForm = () => (
-      <div>
-        <h2>Login to application</h2>
-
-        <form onSubmit={this.login}>
-          <div>
-            username:
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <div>
-            password:
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
-      </div>
-    )
 
     if (this.state.user === null) {
       return (
         <div>
           <Notification type="error" message={this.state.errorMessage} />
-          {loginForm()}
+          <LoginForm
+            login={this.login}
+            username={this.state.username}
+            password={this.state.password}
+            handleChange={this.handleLoginFieldChange}
+          />
         </div>
       )
     }
@@ -222,45 +202,6 @@ class App extends React.Component {
       </div>
     )
   }
-}
-
-const BlogForm = ({ onSubmit, handleChange, title, author, url }) => {
-  return (
-    <div>
-      <h2>Lisää uusi blogi</h2>
-
-      <form onSubmit={onSubmit}>
-        <div>
-          title:
-          <input
-            type="text"
-            name="title"
-            value={title}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            type="text"
-            name="author"
-            value={author}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            type="text"
-            name="url"
-            value={url}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit">lisää blogi</button>
-      </form>
-    </div>
-  )
 }
 
 export default App

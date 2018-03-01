@@ -1,5 +1,4 @@
 import React from 'react'
-import blogService from '../services/blogs'
 
 class Blog extends React.Component {
   constructor(props) {
