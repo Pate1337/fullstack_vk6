@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import './index.css'
+import Togglable from './components/Togglable'
 
 class App extends React.Component {
   constructor(props) {
@@ -17,14 +18,16 @@ class App extends React.Component {
       author: '',
       url: '',
       successMessage: null,
-      errorMessage: null
+      errorMessage: null,
+      lastLiked: null
     }
   }
 
   componentDidMount() {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
+      blogs.sort(this.sortByLikes)
       this.setState({ blogs })
-    )
+    })
     console.log('mountataaan...')
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
@@ -34,7 +37,12 @@ class App extends React.Component {
     }
   }
 
+  sortByLikes = (a, b) => {
+    return parseInt(b.likes) - parseInt(a.likes)
+  }
+
   addBlog = (event) => {
+    console.log('lisätään uutta blogia')
     event.preventDefault()
     const blogObject = {
       title: this.state.title,
@@ -45,6 +53,7 @@ class App extends React.Component {
     blogService
       .create(blogObject)
       .then(newBlog => {
+        console.log('Nyt pitäis olla newBlog oikeennäkönen: ', newBlog)
         this.setState({
           blogs: this.state.blogs.concat(newBlog),
           title: '',
@@ -68,12 +77,15 @@ class App extends React.Component {
   }
 
   logOut = (event) => {
+    console.log('kirjaudutaan ulos')
     event.preventDefault()
     window.localStorage.removeItem('loggedBlogAppUser')
     this.setState({ user: null })
   }
 
+
   login = async (event) => {
+    console.log('kirjaudutaan sisään')
     event.preventDefault()
     try{
       const user = await loginService.login({
@@ -95,7 +107,26 @@ class App extends React.Component {
     }
   }
 
+  addLike = async (blog) => {
+    console.log('Lisätään Tykkäys')
+    const updatedBlog = await blogService.update(blog.id, blog)
+    /*Voisi hoitaa myös samaantapaan kuin post metodissa, eli populatella*/
+    /*Tässä jo user kenttä on pelkkä id, siksi kaikki kusee*/
+    /*this.setState({
+      blogs: this.state.blogs.map(b => b.id === updatedBlog._id ? updatedBlog : b)
+    })*/
+    blogService.getAll().then(blogs => {
+      blogs.sort(this.sortByLikes)
+      this.setState({
+        blogs: blogs,
+        lastLiked: blog.id
+      })
+    })
+  }
+
   render() {
+    console.log('renderöidään')
+    /*const blogs = this.state.blogs.sort(this.sortByLikes)*/
     const loginForm = () => (
       <div>
         <h2>Login to application</h2>
@@ -123,42 +154,7 @@ class App extends React.Component {
         </form>
       </div>
     )
-    const blogForm = () => (
-      <div>
-        <h2>Lisää uusi blogi</h2>
 
-        <form onSubmit={this.addBlog}>
-          <div>
-            title:
-            <input
-              type="text"
-              name="title"
-              value={this.state.title}
-              onChange={this.handleBlogFieldChange}
-            />
-          </div>
-          <div>
-            author:
-            <input
-              type="text"
-              name="author"
-              value={this.state.author}
-              onChange={this.handleBlogFieldChange}
-            />
-          </div>
-          <div>
-            url:
-            <input
-              type="text"
-              name="url"
-              value={this.state.url}
-              onChange={this.handleBlogFieldChange}
-            />
-          </div>
-          <button type="submit">lisää blogi</button>
-        </form>
-      </div>
-    )
     if (this.state.user === null) {
       return (
         <div>
@@ -174,15 +170,62 @@ class App extends React.Component {
           <button onClick={this.logOut}>logout</button>
         </div>
         <div>
-          {blogForm()}
+          <Togglable buttonLabel="Lisää uusi blogi">
+            <BlogForm
+              onSubmit={this.addBlog}
+              handleChange={this.handleBlogFieldChange}
+              title={this.state.title}
+              author={this.state.author}
+              url={this.state.url}
+            />
+          </Togglable>
         </div>
         <h2>Blogs</h2>
         {this.state.blogs.map(blog =>
-          <Blog key={blog.id} blog={blog}/>
+          <Blog key={blog.id} blog={blog} handleLike={this.addLike} recentlyLiked={this.state.lastLiked} />
         )}
       </div>
     )
   }
+}
+
+const BlogForm = ({ onSubmit, handleChange, title, author, url }) => {
+  return (
+    <div>
+      <h2>Lisää uusi blogi</h2>
+
+      <form onSubmit={onSubmit}>
+        <div>
+          title:
+          <input
+            type="text"
+            name="title"
+            value={title}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          author:
+          <input
+            type="text"
+            name="author"
+            value={author}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          url:
+          <input
+            type="text"
+            name="url"
+            value={url}
+            onChange={handleChange}
+          />
+        </div>
+        <button type="submit">lisää blogi</button>
+      </form>
+    </div>
+  )
 }
 
 export default App
