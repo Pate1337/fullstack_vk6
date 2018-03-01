@@ -28,7 +28,7 @@ class Blog extends React.Component {
     console.log('renderöidään Blogissa')
     /*Noihin alempiin voidaan laittaa toisena ehtona,
     jos this.props.blog.id === this.props.recentlyLiked, niin display: ''*/
-    const showAllInfo = { display: this.state.showAll? '' : 'none' }
+    const showAllInfo = { display: this.state.showAll ? '' : 'none' }
     const onlyShowTitleAndAuthor = { display: this.state.showAll ? 'none' : '' }
     const showDelete = { display: (this.props.user.id === this.props.blog.user._id) ? '' : 'none'}
     const blogStyle = {
@@ -40,10 +40,10 @@ class Blog extends React.Component {
     }
     return (
       <div style={blogStyle}>
-        <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility}>
+        <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
           {this.props.blog.title} {this.props.blog.author}
         </div>
-        <div style={showAllInfo} onClick={this.toggleVisibility}>
+        <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
           <p>{this.props.blog.title} {this.props.blog.author}</p>
           <a href={this.props.blog.url}>{this.props.blog.url}</a>
           <p>Lisääjä {this.props.blog.user.name}</p>
