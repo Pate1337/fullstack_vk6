@@ -49,7 +49,7 @@ class App extends React.Component {
       author: this.state.author,
       url: this.state.url
     }
-
+    this.BlogForm.toggleVisibility()
     blogService
       .create(blogObject)
       .then(newBlog => {
@@ -124,6 +124,40 @@ class App extends React.Component {
     })
   }
 
+  deleteBlog = (event) => {
+    event.preventDefault()
+    const blogId = event.target.id
+    console.log('Postetattavan blogin id: ', blogId)
+    const blog = this.state.blogs.find(blog => blog.id === blogId)
+    console.log('Blogeista löydetty blogi: ', blog)
+
+    if (window.confirm('Poistetaanko \'' + blog.title + '\' by ' + blog.author + '?')) {
+      blogService
+        .deleteBlog(blog)
+        .then(response => {
+          const newBlogList = this.state.blogs.filter(blog => blog.id !== blogId)
+          newBlogList.sort(this.sortByLikes)
+          this.setState({
+            blogs: newBlogList,
+            successMessage: blog.title + ' poistettu!'
+          })
+          setTimeout(() => {
+            this.setState({successMessage: null})
+          }, 5000)
+        })
+        .catch(error => {
+          this.setState({
+            errorMessage: 'Can\'t delete other user\'s blogs'
+          })
+          setTimeout(() => {
+            this.setState({
+              errorMessage: null
+            })
+          }, 5000)
+        })
+    }
+  }
+
   render() {
     console.log('renderöidään')
     /*const blogs = this.state.blogs.sort(this.sortByLikes)*/
@@ -166,11 +200,12 @@ class App extends React.Component {
     return (
       <div>
         <Notification type="success" message={this.state.successMessage} />
+        <Notification type="error" message={this.state.errorMessage} />
         <div>{this.state.user.name} logged
           <button onClick={this.logOut}>logout</button>
         </div>
         <div>
-          <Togglable buttonLabel="Lisää uusi blogi">
+          <Togglable buttonLabel="Lisää uusi blogi" ref={component => this.BlogForm = component}>
             <BlogForm
               onSubmit={this.addBlog}
               handleChange={this.handleBlogFieldChange}
@@ -182,7 +217,7 @@ class App extends React.Component {
         </div>
         <h2>Blogs</h2>
         {this.state.blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={this.addLike} recentlyLiked={this.state.lastLiked} />
+          <Blog key={blog.id} blog={blog} handleLike={this.addLike} user={this.state.user} deleteBlog={this.deleteBlog}/>
         )}
       </div>
     )

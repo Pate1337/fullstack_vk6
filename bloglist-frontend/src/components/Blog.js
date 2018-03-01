@@ -6,15 +6,13 @@ class Blog extends React.Component {
     super(props)
     console.log('Nyt ollaan Blog konstruktorissa')
     this.state = {
-      showAll: false,
-      recentlyLiked: this.props.recentlyLiked
+      showAll: false
     }
   }
 
   toggleVisibility = () => {
     this.setState({
-      showAll: !this.state.showAll,
-      recentlyLiked: null
+      showAll: !this.state.showAll
     })
   }
 
@@ -33,6 +31,7 @@ class Blog extends React.Component {
     jos this.props.blog.id === this.props.recentlyLiked, niin display: ''*/
     const showAllInfo = { display: this.state.showAll? '' : 'none' }
     const onlyShowTitleAndAuthor = { display: this.state.showAll ? 'none' : '' }
+    const showDelete = { display: (this.props.user.id === this.props.blog.user._id) ? '' : 'none'}
     const blogStyle = {
       paddingTop: 10,
       paddingLeft: 2,
@@ -54,6 +53,9 @@ class Blog extends React.Component {
             likes {this.props.blog.likes}
             <button onClick={this.addLike}>like</button>
           </p>
+          <div style={showDelete}>
+            <button onClick={this.props.deleteBlog} id={this.props.blog.id}>Delete</button>
+          </div>
         </div>
       </div>
     )
