@@ -12,13 +12,11 @@ describe('<SimpleBlog />', () => {
 
     const blogComponent = shallow(<SimpleBlog blog={blog} />)
     let contentDiv = blogComponent.find('.titleAndAuthor')
-    console.log(contentDiv.debug())
 
     expect(contentDiv.text()).toContain(blog.title)
     expect(contentDiv.text()).toContain(blog.author)
 
     contentDiv = blogComponent.find('.likes')
-    console.log(contentDiv.debug())
 
     expect(contentDiv.text()).toContain(blog.likes)
   })
@@ -35,7 +33,6 @@ describe('<SimpleBlog />', () => {
     const blogComponent = shallow(<SimpleBlog blog={blog} onClick={mockHandler} />)
 
     const button = blogComponent.find('button')
-    console.log(button.debug())
     button.simulate('click')
     button.simulate('click')
 

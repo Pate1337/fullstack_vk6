@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
 import Blog from './Blog'
 
 describe.only('<Blog />', () => {
@@ -36,13 +35,10 @@ describe.only('<Blog />', () => {
 
   it('after clicking name the details are displayed', () => {
     let nameDiv = blogComponent.find('.titleAndAuthor')
-    console.log(nameDiv.getElement().props.style)
     nameDiv.simulate('click')
-    console.log(nameDiv.getElement().props.style)
-    expect(nameDiv.getElement().props.style).toEqual({ display: 'none' })
 
     let detailDiv = blogComponent.find('.allFields')
-    console.log(detailDiv.debug())
+
     expect(detailDiv.getElement().props.style).toEqual({ display: '' })
   })
 })

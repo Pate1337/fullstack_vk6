@@ -166,7 +166,7 @@ class App extends React.Component {
 
     if (this.state.user === null) {
       return (
-        <div>
+        <div className="notLogged">
           <Notification type="error" message={this.state.errorMessage} />
           <LoginForm
             login={this.login}
@@ -178,7 +178,7 @@ class App extends React.Component {
       )
     }
     return (
-      <div>
+      <div className="logged">
         <Notification type="success" message={this.state.successMessage} />
         <Notification type="error" message={this.state.errorMessage} />
         <div>{this.state.user.name} logged
