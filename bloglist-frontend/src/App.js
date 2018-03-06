@@ -29,6 +29,10 @@ class App extends React.Component {
   componentDidMount() {
     blogService.getAll().then(blogs => {
       blogs.sort(this.sortByLikes)
+      console.log('Blogit mountissa: ')
+      blogs.forEach(b => {
+        console.log(b)
+      })
       this.setState({ blogs })
     })
     console.log('mountataaan...')
@@ -114,6 +118,10 @@ class App extends React.Component {
     await blogService.update(blog.id, blog)
     blogService.getAll().then(blogs => {
       blogs.sort(this.sortByLikes)
+      console.log('Blogit kun niistä tykätään: ')
+      blogs.forEach(b => {
+        console.log(b)
+      })
       this.props.addSuccessNotification(`Tykkäys lisätty blogille ${blog.title}!`)
       setTimeout(() => {
         this.props.addSuccessNotification(null)
