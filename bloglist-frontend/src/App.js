@@ -7,6 +7,9 @@ import './index.css'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import { addErrorNotification } from './reducers/notificationReducer'
+import { addSuccessNotification } from './reducers/notificationReducer'
+import { connect } from 'react-redux'
 
 class App extends React.Component {
   constructor(props) {
@@ -19,8 +22,6 @@ class App extends React.Component {
       title: '',
       author: '',
       url: '',
-      successMessage: null,
-      errorMessage: null,
       lastLiked: null
     }
   }
@@ -60,12 +61,11 @@ class App extends React.Component {
           blogs: this.state.blogs.concat(newBlog),
           title: '',
           author: '',
-          url: '',
-          successMessage: 'a new blog \'' + blogObject.title + '\' by '
-           + blogObject.author + ' added!'
+          url: ''
         })
+        this.props.addSuccessNotification(`A new blog ${blogObject.title} by ${blogObject.author} added!`)
         setTimeout(() => {
-          this.setState({successMessage: null})
+          this.props.addSuccessNotification(null)
         }, 5000)
       })
   }
@@ -100,11 +100,11 @@ class App extends React.Component {
     } catch(exception) {
       this.setState({
         username: '',
-        password: '',
-        errorMessage: 'käyttäjätunnus tai salasana virheellinen',
+        password: ''
       })
+      this.props.addErrorNotification('käyttäjätunnus tai salasana virheellinen')
       setTimeout(() => {
-        this.setState({ errorMessage: null })
+        this.props.addErrorNotification(null)
       }, 5000)
     }
   }
@@ -112,16 +112,14 @@ class App extends React.Component {
   addLike = async (blog) => {
     console.log('Lisätään Tykkäys')
     await blogService.update(blog.id, blog)
-    /*Voisi hoitaa myös samaantapaan kuin post metodissa, eli populatella*/
-    /*Tässä jo user kenttä on pelkkä id, siksi kaikki kusee*/
-    /*this.setState({
-      blogs: this.state.blogs.map(b => b.id === updatedBlog._id ? updatedBlog : b)
-    })*/
     blogService.getAll().then(blogs => {
       blogs.sort(this.sortByLikes)
+      this.props.addSuccessNotification(`Tykkäys lisätty blogille ${blog.title}!`)
+      setTimeout(() => {
+        this.props.addSuccessNotification(null)
+      }, 5000)
       this.setState({
-        blogs: blogs,
-        lastLiked: blog.id
+        blogs: blogs
       })
     })
   }
@@ -139,22 +137,18 @@ class App extends React.Component {
         .then(response => {
           const newBlogList = this.state.blogs.filter(blog => blog.id !== blogId)
           newBlogList.sort(this.sortByLikes)
-          this.setState({
-            blogs: newBlogList,
-            successMessage: blog.title + ' poistettu!'
-          })
+          this.props.addSuccessNotification(`${blog.title} poistettu!`)
           setTimeout(() => {
-            this.setState({successMessage: null})
+            this.props.addSuccessNotification(null)
           }, 5000)
+          this.setState({
+            blogs: newBlogList
+          })
         })
         .catch(error => {
-          this.setState({
-            errorMessage: 'Can\'t delete other user\'s blogs'
-          })
+          this.props.addErrorNotification('Can\'t delete other user\'s blogs')
           setTimeout(() => {
-            this.setState({
-              errorMessage: null
-            })
+            this.props.addErrorNotification(null)
           }, 5000)
         })
     }
@@ -162,12 +156,10 @@ class App extends React.Component {
 
   render() {
     console.log('renderöidään')
-    /*const blogs = this.state.blogs.sort(this.sortByLikes)*/
-
     if (this.state.user === null) {
       return (
         <div className="notLogged">
-          <Notification type="error" message={this.state.errorMessage} />
+          <Notification />
           <LoginForm
             login={this.login}
             username={this.state.username}
@@ -179,8 +171,7 @@ class App extends React.Component {
     }
     return (
       <div className="logged">
-        <Notification type="success" message={this.state.successMessage} />
-        <Notification type="error" message={this.state.errorMessage} />
+        <Notification />
         <div>{this.state.user.name} logged
           <button onClick={this.logOut}>logout</button>
         </div>
@@ -204,4 +195,11 @@ class App extends React.Component {
   }
 }
 
-export default App
+const mapDispatchToProps = {
+  addErrorNotification,
+  addSuccessNotification
+}
+
+const ConnectedApp = connect(null, mapDispatchToProps)(App)
+
+export default ConnectedApp
