@@ -1,4 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { addSuccessNotification } from '../reducers/notificationReducer'
+import { addErrorNotification } from '../reducers/notificationReducer'
+import { addLike } from '../reducers/blogReducer'
+import { deleteBlog } from '../reducers/blogReducer'
 
 class Blog extends React.Component {
   constructor(props) {
@@ -15,17 +20,33 @@ class Blog extends React.Component {
     })
   }
 
-  addLike = (event) => {
-    event.preventDefault()
-    let modifiedBlog = this.props.blog
-    modifiedBlog.likes = this.props.blog.likes + 1
+  handleLike = async (blog) => {
+    await this.props.addLike(blog)
+    console.log('Blogi handleLikessa: ' + blog.id)
+    this.props.addSuccessNotification('tänne tekstiä')
+    setTimeout(() => {
+      this.props.addSuccessNotification(null)
+    }, 5000)
+  }
 
-    this.props.handleLike(modifiedBlog)
-    /*Vois tallettaa vaikka jonku recentlyLikedId*/
+  handleDelete = async (blog) => {
+    const result = this.props.deleteBlog(blog)
+    if (result === "error") {
+      this.props.addErrorNotification('Can\'t delete other user\'s blogs')
+      setTimeout(() => {
+        this.props.addErrorNotification(null)
+      }, 5000)
+    } else if (result !== null) {
+      this.props.addSuccessNotification(`${blog.title} poistettu!`)
+      setTimeout(() => {
+        this.props.addSuccessNotification(null)
+      }, 5000)
+    }
   }
 
   render() {
     console.log('renderöidään Blogissa')
+    console.log('renderöitävän blogin id: ' + this.props.blog.id)
     /*Noihin alempiin voidaan laittaa toisena ehtona,
     jos this.props.blog.id === this.props.recentlyLiked, niin display: ''*/
     const showAllInfo = { display: this.state.showAll ? '' : 'none' }
@@ -37,6 +58,18 @@ class Blog extends React.Component {
       border: 'solid',
       borderWidth: 1,
       marginBottom: 5
+    }
+    const blog = {
+      id: this.props.blog.id,
+      title: this.props.blog.title,
+      author: this.props.blog.author,
+      url: this.props.blog.url,
+      likes: this.props.blog.likes,
+      user: {
+        _id: this.props.blog.user._id,
+        username: this.props.blog.user.username,
+        name: this.props.blog.user.name
+      }
     }
     return (
       <div style={blogStyle}>
@@ -50,10 +83,10 @@ class Blog extends React.Component {
           <p>Lisääjän id {this.props.blog.user._id}</p>
           <p>
             likes {this.props.blog.likes}
-            <button onClick={this.addLike}>like</button>
+            <button onClick={() => this.handleLike(this.props.blog)}>like</button>
           </p>
           <div style={showDelete}>
-            <button onClick={this.props.deleteBlog} id={this.props.blog.id}>Delete</button>
+            <button onClick={() => this.handleDelete(this.props.blog)} id={this.props.blog.id}>Delete</button>
           </div>
         </div>
       </div>
@@ -61,4 +94,13 @@ class Blog extends React.Component {
   }
 }
 
-export default Blog
+const mapDispatchToProps = {
+  addSuccessNotification,
+  addErrorNotification,
+  addLike,
+  deleteBlog
+}
+
+const ConnectedBlog = connect(null, mapDispatchToProps)(Blog)
+
+export default ConnectedBlog

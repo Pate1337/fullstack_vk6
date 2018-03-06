@@ -10,6 +10,8 @@ import LoginForm from './components/LoginForm'
 import { addErrorNotification } from './reducers/notificationReducer'
 import { addSuccessNotification } from './reducers/notificationReducer'
 import { connect } from 'react-redux'
+import { blogInitialization } from './reducers/blogReducer'
+import BlogList from './components/BlogList'
 
 class App extends React.Component {
   constructor(props) {
@@ -27,14 +29,15 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    blogService.getAll().then(blogs => {
+    /*blogService.getAll().then(blogs => {
       blogs.sort(this.sortByLikes)
       console.log('Blogit mountissa: ')
       blogs.forEach(b => {
         console.log(b)
       })
       this.setState({ blogs })
-    })
+    })*/
+    this.props.blogInitialization()
     console.log('mountataaan...')
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
@@ -48,7 +51,9 @@ class App extends React.Component {
     return parseInt(b.likes, 10) - parseInt(a.likes, 10)
   }
 
-  addBlog = (event) => {
+  /*this.BlogForm.toggleVisibility()*/
+
+  /*addBlog = (event) => {
     console.log('lisätään uutta blogia')
     event.preventDefault()
     const blogObject = {
@@ -73,11 +78,11 @@ class App extends React.Component {
         }, 5000)
       })
   }
-
-  handleBlogFieldChange = (event) => {
+*/
+/*  handleBlogFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
-
+*/
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
@@ -112,7 +117,7 @@ class App extends React.Component {
       }, 5000)
     }
   }
-
+/*
   addLike = async (blog) => {
     console.log('Lisätään Tykkäys')
     await blogService.update(blog.id, blog)
@@ -131,8 +136,8 @@ class App extends React.Component {
       })
     })
   }
-
-  deleteBlog = (event) => {
+*/
+/*  deleteBlog = (event) => {
     event.preventDefault()
     const blogId = event.target.id
     console.log('Postetattavan blogin id: ', blogId)
@@ -161,7 +166,7 @@ class App extends React.Component {
         })
     }
   }
-
+*/
   render() {
     console.log('renderöidään')
     if (this.state.user === null) {
@@ -185,29 +190,27 @@ class App extends React.Component {
         </div>
         <div>
           <Togglable buttonLabel="Lisää uusi blogi" ref={component => this.BlogForm = component}>
-            <BlogForm
-              onSubmit={this.addBlog}
-              handleChange={this.handleBlogFieldChange}
-              title={this.state.title}
-              author={this.state.author}
-              url={this.state.url}
-            />
+            <BlogForm />
           </Togglable>
         </div>
-        <h2>Blogs</h2>
-        {this.state.blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={this.addLike} user={this.state.user} deleteBlog={this.deleteBlog}/>
-        )}
+        <BlogList user={this.state.user} />
       </div>
     )
   }
 }
 
-const mapDispatchToProps = {
-  addErrorNotification,
-  addSuccessNotification
+const mapStateToProps = (state) => {
+  return {
+    blogs: state.blogs
+  }
 }
 
-const ConnectedApp = connect(null, mapDispatchToProps)(App)
+const mapDispatchToProps = {
+  addErrorNotification,
+  addSuccessNotification,
+  blogInitialization
+}
+
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
 
 export default ConnectedApp
