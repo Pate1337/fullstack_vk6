@@ -4,6 +4,7 @@ import Blog from './Blog'
 
 class BlogList extends React.Component {
   render() {
+    console.log('Renderöidään BlogList')
     return (
       <div>
         <h2>Blogs</h2>

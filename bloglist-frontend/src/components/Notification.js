@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 
 class Notification extends React.Component {
   render () {
+    console.log('Renderöidään Notification')
     if (this.props.notification === null) {
       return null
     } else if (this.props.notification.message === null) {

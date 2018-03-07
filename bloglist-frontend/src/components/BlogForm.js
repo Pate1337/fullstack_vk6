@@ -15,6 +15,7 @@ class BlogForm extends React.Component {
   }
 
   handleSubmit = async (e) => {
+    console.log('BlogForm handleSubmit')
     e.preventDefault()
     const blogObject = {
       title: this.state.title,
@@ -39,6 +40,7 @@ class BlogForm extends React.Component {
   }
 
   render() {
+    console.log('Renderöidään BlogForm')
     return (
       <div>
         <h2>Lisää uusi blogi</h2>

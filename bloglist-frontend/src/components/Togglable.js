@@ -15,6 +15,7 @@ class Togglable extends React.Component {
   }
 
   render() {
+    console.log('Renderöidään Togglable')
     const hideWhenVisible = { display: this.state.visible ? 'none' : '' }
     const showWhenVisible = { display: this.state.visible ? '' : 'none' }
 

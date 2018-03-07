@@ -4,29 +4,27 @@ import blogService from '../services/blogs'
 const loggedUserReducer = (state = null, action) => {
   switch(action.type) {
     case 'INIT_LOGGED':
+      console.log('Initoidaan kirjautunut Käyttäjä loggedUserReducerissa')
       return action.data
     case 'LOGIN':
-      console.log('Nyt LOGINnataan ja palautetaan state')
-      console.log('Onko action.data muka null: ' + action.data.name)
+      console.log('Kirjaudutaan sisään loggedUserReducerissa')
       return action.data
     case 'LOGOUT':
-      console.log('Ei kai täällä vaan käydä missään vaiheessa')
+      console.log('Kirjaudutaan ulos loggedUserReducerissa')
       return null
     default:
-      console.log('Eikä täällä kiitos')
-
+      console.log('Case default loggedUserReducerissa')
       return state
   }
 }
 
 export const addLoggedUser = (userObject) => {
+  console.log('addLoggedUser loggedUserReducer')
   return async (dispatch) => {
-    console.log('Nyt ollaan addLoggedUserissa')
     try {
       const user = await loginService.login(userObject)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      console.log('Katsotaan onko user Object, tulostetaan nimi: ' + user.name)
       dispatch({
         type: 'LOGIN',
         data: user
@@ -38,6 +36,7 @@ export const addLoggedUser = (userObject) => {
 }
 
 export const loggedUserInitialization = () => {
+  console.log('loggedUserInitialization loggedUserReducer')
   return async (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
@@ -52,6 +51,7 @@ export const loggedUserInitialization = () => {
 }
 
 export const removeLoggedUser = () => {
+  console.log('removeLoggedUser loggedUserReducer')
   return async (dispatch) => {
     dispatch({
       type: 'LOGOUT'

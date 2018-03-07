@@ -6,7 +6,6 @@ import { addLoggedUser } from '../reducers/loggedUserReducer'
 
 class LoginForm extends React.Component {
   constructor() {
-    console.log('Millos LoginForm renderöidään')
     super()
     this.state = {
       username: '',
@@ -19,15 +18,13 @@ class LoginForm extends React.Component {
   }
 
   handleLogin = async (event) => {
+    console.log('handleLogin LoginForm')
     event.preventDefault()
     const user = {
       username: this.state.username,
       password: this.state.password
     }
-    console.log('user-olio handleLoginissa: ' + user)
     const response = await this.props.addLoggedUser(user)
-    console.log('Nyt mennään eteenpäin addLoggedUserin jälkee')
-    console.log('STATE NYT on ' + this.props.loggedUser)
     if (response !== "error") {
       /*Olisin halunnu tänne this.props.loggedUser.name mutta oli vähä vaikeeta*/
       this.props.addSuccessNotification(`Tervetuloa ${user.username}!`)
@@ -47,7 +44,7 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log('Eli tätäkö ei nyt renderöidä sen jälkee ku tilaa muutetaa??')
+    console.log('Renderöidään LoginForm')
     return (
       <div>
         <h2>Login to application</h2>

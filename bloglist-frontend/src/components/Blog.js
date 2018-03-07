@@ -28,6 +28,7 @@ class Blog extends React.Component {
   }
 
   handleDelete = async (blog) => {
+    console.log('Blog handleDelete')
     if (window.confirm('Poistetaanko \'' + blog.title + '\' by ' + blog.author + '?')) {
       const response = await this.props.deleteBlog(blog)
       console.log(response)
