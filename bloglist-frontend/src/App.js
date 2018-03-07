@@ -1,5 +1,4 @@
 import React from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -17,26 +16,13 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      blogs: [],
       username: '',
       password: '',
-      user: null,
-      title: '',
-      author: '',
-      url: '',
-      lastLiked: null
+      user: null
     }
   }
 
   componentDidMount() {
-    /*blogService.getAll().then(blogs => {
-      blogs.sort(this.sortByLikes)
-      console.log('Blogit mountissa: ')
-      blogs.forEach(b => {
-        console.log(b)
-      })
-      this.setState({ blogs })
-    })*/
     this.props.blogInitialization()
     console.log('mountataaan...')
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -47,42 +33,6 @@ class App extends React.Component {
     }
   }
 
-  sortByLikes = (a, b) => {
-    return parseInt(b.likes, 10) - parseInt(a.likes, 10)
-  }
-
-  /*this.BlogForm.toggleVisibility()*/
-
-  /*addBlog = (event) => {
-    console.log('lisätään uutta blogia')
-    event.preventDefault()
-    const blogObject = {
-      title: this.state.title,
-      author: this.state.author,
-      url: this.state.url
-    }
-    this.BlogForm.toggleVisibility()
-    blogService
-      .create(blogObject)
-      .then(newBlog => {
-        console.log('Nyt pitäis olla newBlog oikeennäkönen: ', newBlog)
-        this.setState({
-          blogs: this.state.blogs.concat(newBlog),
-          title: '',
-          author: '',
-          url: ''
-        })
-        this.props.addSuccessNotification(`A new blog ${blogObject.title} by ${blogObject.author} added!`)
-        setTimeout(() => {
-          this.props.addSuccessNotification(null)
-        }, 5000)
-      })
-  }
-*/
-/*  handleBlogFieldChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
-*/
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
@@ -117,56 +67,7 @@ class App extends React.Component {
       }, 5000)
     }
   }
-/*
-  addLike = async (blog) => {
-    console.log('Lisätään Tykkäys')
-    await blogService.update(blog.id, blog)
-    blogService.getAll().then(blogs => {
-      blogs.sort(this.sortByLikes)
-      console.log('Blogit kun niistä tykätään: ')
-      blogs.forEach(b => {
-        console.log(b)
-      })
-      this.props.addSuccessNotification(`Tykkäys lisätty blogille ${blog.title}!`)
-      setTimeout(() => {
-        this.props.addSuccessNotification(null)
-      }, 5000)
-      this.setState({
-        blogs: blogs
-      })
-    })
-  }
-*/
-/*  deleteBlog = (event) => {
-    event.preventDefault()
-    const blogId = event.target.id
-    console.log('Postetattavan blogin id: ', blogId)
-    const blog = this.state.blogs.find(blog => blog.id === blogId)
-    console.log('Blogeista löydetty blogi: ', blog)
 
-    if (window.confirm('Poistetaanko \'' + blog.title + '\' by ' + blog.author + '?')) {
-      blogService
-        .deleteBlog(blog)
-        .then(response => {
-          const newBlogList = this.state.blogs.filter(blog => blog.id !== blogId)
-          newBlogList.sort(this.sortByLikes)
-          this.props.addSuccessNotification(`${blog.title} poistettu!`)
-          setTimeout(() => {
-            this.props.addSuccessNotification(null)
-          }, 5000)
-          this.setState({
-            blogs: newBlogList
-          })
-        })
-        .catch(error => {
-          this.props.addErrorNotification('Can\'t delete other user\'s blogs')
-          setTimeout(() => {
-            this.props.addErrorNotification(null)
-          }, 5000)
-        })
-    }
-  }
-*/
   render() {
     console.log('renderöidään')
     if (this.state.user === null) {
@@ -190,7 +91,7 @@ class App extends React.Component {
         </div>
         <div>
           <Togglable buttonLabel="Lisää uusi blogi" ref={component => this.BlogForm = component}>
-            <BlogForm />
+            <BlogForm component={this.BlogForm} />
           </Togglable>
         </div>
         <BlogList user={this.state.user} />

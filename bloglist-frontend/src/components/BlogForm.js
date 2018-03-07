@@ -7,7 +7,6 @@ import { addBlog } from '../reducers/blogReducer'
 class BlogForm extends React.Component {
   constructor() {
     super()
-    /*Pidetään varmuudeksi vielä title, url ja author Appissa*/
     this.state = {
       title: '',
       author: '',
@@ -28,6 +27,7 @@ class BlogForm extends React.Component {
       author: '',
       url: ''
     })
+    this.props.component.toggleVisibility()
     this.props.addSuccessNotification(`A new blog ${blogObject.title} by ${blogObject.author} added!`)
     setTimeout(() => {
       this.props.addSuccessNotification(null)
