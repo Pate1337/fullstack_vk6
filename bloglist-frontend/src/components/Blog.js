@@ -49,7 +49,8 @@ class Blog extends React.Component {
     console.log('renderöidään Blogissa')
     const showAllInfo = { display: this.state.showAll ? '' : 'none' }
     const onlyShowTitleAndAuthor = { display: this.state.showAll ? 'none' : '' }
-    /*Jos nyt sattuis käymään niin että delete näkyis muillekki, nii ei ne niitä poistaa voi ja saavat ilmotuksen*/
+    /*Jos nyt sattuis käymään niin että delete näkyis muillekki,
+    nii ei ne niitä poistaa voi ja saavat ilmotuksen*/
     const showDelete = { display: (this.props.user.id === this.props.blog.user._id) ? '' : 'none'}
     const blogStyle = {
       paddingTop: 10,
@@ -80,6 +81,11 @@ class Blog extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    user: state.loggedUser
+  }
+}
 
 const mapDispatchToProps = {
   addSuccessNotification,
@@ -88,6 +94,6 @@ const mapDispatchToProps = {
   deleteBlog
 }
 
-const ConnectedBlog = connect(null, mapDispatchToProps)(Blog)
+const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)
 
 export default ConnectedBlog

@@ -8,7 +8,7 @@ class BlogList extends React.Component {
       <div>
         <h2>Blogs</h2>
         {this.props.blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} user={this.props.user} />
+          <Blog key={blog.id} blog={blog} />
         )}
       </div>
     )
@@ -19,10 +19,9 @@ const sortByLikes = (a, b) => {
   return parseInt(b.likes, 10) - parseInt(a.likes, 10)
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
-    blogs: state.blogs.sort(sortByLikes),
-    user: [ownProps.user]
+    blogs: state.blogs.sort(sortByLikes)
   }
 }
 
