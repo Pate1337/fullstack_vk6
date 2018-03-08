@@ -15,7 +15,7 @@ class User extends React.Component {
       return (
         <tbody>
           <tr>
-            <td><Link to={`/users/${this.props.userUserList.id}`}>{this.props.userUserList.name}</Link></td>
+            <td><Link to={`/users/${this.props.userUserList.id}`}>{this.props.userUserList.username}</Link></td>
             <td>{this.props.userUserList.blogs}</td>
           </tr>
         </tbody>

@@ -4,6 +4,8 @@ import { addSuccessNotification } from '../reducers/notificationReducer'
 import { addErrorNotification } from '../reducers/notificationReducer'
 import { addLike } from '../reducers/blogReducer'
 import { deleteBlog } from '../reducers/blogReducer'
+import { Link } from 'react-router-dom'
+import { deleteBlogFromUser } from '../reducers/userReducer'
 
 class Blog extends React.Component {
   constructor(props) {
@@ -21,7 +23,7 @@ class Blog extends React.Component {
 
   handleLike = async (blog) => {
     await this.props.addLike(blog)
-    this.props.addSuccessNotification('tänne tekstiä')
+    this.props.addSuccessNotification(`Lisätty tykkäys blogille ${blog.title} by ${blog.author}!`)
     setTimeout(() => {
       this.props.addSuccessNotification(null)
     }, 5000)
@@ -31,8 +33,8 @@ class Blog extends React.Component {
     console.log('Blog handleDelete')
     if (window.confirm('Poistetaanko \'' + blog.title + '\' by ' + blog.author + '?')) {
       const response = await this.props.deleteBlog(blog)
-      console.log(response)
       if (response !== "error") {
+        this.props.deleteBlogFromUser(this.props.user.id)
         this.props.addSuccessNotification(`${blog.title} poistettu!`)
         setTimeout(() => {
           this.props.addSuccessNotification(null)
@@ -52,7 +54,6 @@ class Blog extends React.Component {
     const onlyShowTitleAndAuthor = { display: this.state.showAll ? 'none' : '' }
     /*Jos nyt sattuis käymään niin että delete näkyis muillekki,
     nii ei ne niitä poistaa voi ja saavat ilmotuksen*/
-    const showDelete = { display: (this.props.user.id === this.props.blog.user._id) ? '' : 'none'}
     const blogStyle = {
       paddingTop: 10,
       paddingLeft: 2,
@@ -60,31 +61,64 @@ class Blog extends React.Component {
       borderWidth: 1,
       marginBottom: 5
     }
-    return (
-      <div style={blogStyle}>
-        <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
-          {this.props.blog.title} {this.props.blog.author}
-        </div>
-        <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
-          <p>{this.props.blog.title} {this.props.blog.author}</p>
-          <a href={this.props.blog.url}>{this.props.blog.url}</a>
-          <p>Lisääjä {this.props.blog.user.name}</p>
-          <p>Lisääjän id {this.props.blog.user._id}</p>
-          <p>
-            likes {this.props.blog.likes}
-            <button onClick={() => this.handleLike(this.props.blog)}>like</button>
-          </p>
-          <div style={showDelete}>
-            <button onClick={() => this.handleDelete(this.props.blog)} id={this.props.blog.id}>Delete</button>
+    if (this.props.blogs.length === 0) {
+      return (
+        <div>LOADING :DDD</div>
+      )
+    }
+    if (this.props.blogApp === undefined) {
+      const blog = this.props.blogBlogList
+      console.log('Blogiin saavuttu BlogLististä')
+      const showDelete = { display: (this.props.user.id === blog.user._id) ? '' : 'none'}
+      return (
+        <div style={blogStyle}>
+          <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
+            {blog.title} {blog.author}
+          </div>
+          <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
+            <Link to={`/blogs/${blog.id}`}>
+              {blog.title}</Link> by {blog.author}
+            <p>
+              likes {blog.likes}
+              <button onClick={() => this.handleLike(blog)}>like</button>
+            </p>
+            <div style={showDelete}>
+              <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+            </div>
           </div>
         </div>
+      )
+    }
+    const showDelete = { display: (this.props.user.id === this.props.blogApp.user._id) ? '' : 'none'}
+    console.log('Blogiin saavuttu Appista')
+    const blog = this.props.blogApp
+    return (
+      <div>
+        <h2>{blog.title} by {blog.author}</h2>
+        <p>
+          Linkki blogiin:&nbsp;
+          <a href={blog.url}>{blog.url}</a>
+        </p>
+        <p>Lisääjä {blog.user.name}</p>
+        <p>Lisääjän id {blog.user._id}</p>
+        <p>
+          likes {blog.likes}
+          <button onClick={() => this.handleLike(blog)}>like</button>
+        </p>
+        <div style={showDelete}>
+          <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+        </div>
+        <p>Halusin pitää tuon mahdollisuuden nähdä enemmän tietoa painamalla blogin nimeä.</p>
       </div>
     )
   }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    user: state.loggedUser
+    user: state.loggedUser,
+    blogBlogList: ownProps.blogBlogList,
+    blogApp: ownProps.blogApp,
+    blogs: state.blogs
   }
 }
 
@@ -92,7 +126,8 @@ const mapDispatchToProps = {
   addSuccessNotification,
   addErrorNotification,
   addLike,
-  deleteBlog
+  deleteBlog,
+  deleteBlogFromUser
 }
 
 const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)

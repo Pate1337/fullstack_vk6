@@ -4,6 +4,7 @@ import './index.css'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import SignupForm from './components/SignupForm'
 import { addErrorNotification } from './reducers/notificationReducer'
 import { addSuccessNotification } from './reducers/notificationReducer'
 import { connect } from 'react-redux'
@@ -15,7 +16,11 @@ import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import User from './components/User'
 import Menu from './components/Menu'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import Blog from './components/Blog'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { createBrowserHistory } from 'history'
+import PropTypes from 'prop-types'
+import LoggedBar from './components/LoggedBar'
 
 class App extends React.Component {
 
@@ -44,6 +49,17 @@ class App extends React.Component {
     return user
   }
 
+  blogById = (id) => {
+    console.log('blogById App. Parametrina saatu id: ' + id)
+    let blog
+    this.props.blogs.forEach(b => {
+      if (b.id === id) {
+        blog = b
+      }
+    })
+    return blog
+  }
+
   render() {
     console.log('renderöidään App')
     if (this.props.loggedUser === null) {
@@ -51,9 +67,16 @@ class App extends React.Component {
       /*LoginFormia ei siis renderöidä uudestaan, koska tänne ei
       päästä jos loggedUser ei ole null*/
       return (
-        <div className="notLogged">
-          <Notification />
-          <LoginForm />
+        <div>
+          <Router>
+            <div className="notLogged">
+              <Notification />
+              <Route exact path="/" render={() => <LoginForm />} />
+              <Route exact path="/signup"
+                render={({history}) => <SignupForm history={history} />}
+              />
+            </div>
+          </Router>
         </div>
       )
     }
@@ -65,8 +88,11 @@ class App extends React.Component {
             <div>
               <h1>Blogi sovellus</h1>
               <Menu />
-              {this.props.loggedUser.name} logged
-              <button onClick={this.logOut}>logout</button>
+              <div>
+                <Route path="/"
+                render={({history}) => <LoggedBar history={history} />} />
+
+              </div>
             </div>
             <Notification />
             <div>
@@ -78,6 +104,8 @@ class App extends React.Component {
             <Route exact path="/users/:id" render={({match}) =>
               <User userApp={this.userById(match.params.id)} />} />
             <Route exact path="/blogs" render={() => <BlogList />} />
+            <Route exact path="/blogs/:id" render={({match}) =>
+              <Blog blogApp={this.blogById(match.params.id)} />} />
           </div>
         </Router>
       </div>

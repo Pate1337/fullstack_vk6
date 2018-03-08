@@ -3,61 +3,76 @@ import { connect } from 'react-redux'
 import { addSuccessNotification } from '../reducers/notificationReducer'
 import { addErrorNotification } from '../reducers/notificationReducer'
 import { addLoggedUser } from '../reducers/loggedUserReducer'
+import { addNewUser } from '../reducers/userReducer'
 import { Link } from 'react-router-dom'
 
-class LoginForm extends React.Component {
+class SignupForm extends React.Component {
   constructor() {
     super()
     this.state = {
       username: '',
+      name: '',
       password: ''
     }
   }
 
-  handleLoginFieldChange = (event) => {
+  handleFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  handleLogin = async (event) => {
-    console.log('handleLogin LoginForm')
+  handleSignup = async (event) => {
+    console.log('handleSignup SignupForm')
     event.preventDefault()
     const user = {
       username: this.state.username,
+      name: this.state.name,
       password: this.state.password
     }
-    const response = await this.props.addLoggedUser(user)
+    const response = await this.props.addNewUser(user)
     if (response !== "error") {
+      /*await this.props.addLoggedUser({user: user.username, password: user.password})*/
       /*Olisin halunnu tänne this.props.loggedUser.name mutta oli vähä vaikeeta*/
-      this.props.addSuccessNotification(`Tervetuloa ${user.username}!`)
+      this.props.addSuccessNotification(`Käyttäjätunnus ${user.username} luotu!`)
       setTimeout(() => {
         this.props.addSuccessNotification(null)
       }, 5000)
+      this.props.history.push('/')
     } else {
-      this.props.addErrorNotification('käyttäjätunnus tai salasana virheellinen')
+      this.props.addErrorNotification('Kaikki kentät ovat pakollisia! Käyttäjätunnus voi myös olla varattu!')
       setTimeout(() => {
         this.props.addErrorNotification(null)
       }, 5000)
       this.setState({
         username: '',
+        name: '',
         password: ''
       })
     }
   }
 
   render() {
-    console.log('Renderöidään LoginForm')
+    console.log('Renderöidään SignupForm')
     return (
       <div>
-        <h2>Login to application</h2>
+        <h2>Create a new User</h2>
 
-        <form onSubmit={this.handleLogin}>
+        <form onSubmit={this.handleSignup}>
           <div>
             username:
             <input
               type="text"
               name="username"
               value={this.state.username}
-              onChange={this.handleLoginFieldChange}
+              onChange={this.handleFieldChange}
+            />
+          </div>
+          <div>
+            name:
+            <input
+              type="text"
+              name="name"
+              value={this.state.name}
+              onChange={this.handleFieldChange}
             />
           </div>
           <div>
@@ -66,28 +81,29 @@ class LoginForm extends React.Component {
               type="password"
               name="password"
               value={this.state.password}
-              onChange={this.handleLoginFieldChange}
+              onChange={this.handleFieldChange}
             />
           </div>
-          <button type="submit">login</button>
+          <button type="submit">Create account</button>
         </form>
-        <Link to="/signup">Luo uusi käyttäjätunnus</Link>
+        <Link to="/">Back to login</Link>
       </div>
     )
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    loggedUser: state.loggedUser
+    loggedUser: state.loggedUser,
+    history: ownProps.history
   }
 }
 const mapDispatchToProps = {
   addSuccessNotification,
   addErrorNotification,
-  addLoggedUser
+  addNewUser
 }
 
-const ConnectedLoginForm = connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+const ConnectedSignupForm = connect(mapStateToProps, mapDispatchToProps)(SignupForm)
 
-export default ConnectedLoginForm
+export default ConnectedSignupForm

@@ -3,10 +3,11 @@ import { connect } from 'react-redux'
 import { addSuccessNotification } from '../reducers/notificationReducer'
 import { addErrorNotification } from '../reducers/notificationReducer'
 import { addBlog } from '../reducers/blogReducer'
+import { addBlogForUser } from '../reducers/userReducer'
 
 class BlogForm extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       title: '',
       author: '',
@@ -23,6 +24,8 @@ class BlogForm extends React.Component {
       url: this.state.url
     }
     this.props.addBlog(blogObject)
+    console.log('id: ' + this.props.loggedUser.id)
+    this.props.addBlogForUser(this.props.loggedUser.id)
     this.setState({
       title: '',
       author: '',
@@ -79,13 +82,19 @@ class BlogForm extends React.Component {
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    loggedUser: state.loggedUser
+  }
+}
 
 const mapDispatchToProps = {
   addSuccessNotification,
   addErrorNotification,
-  addBlog
+  addBlog,
+  addBlogForUser
 }
 
-const ConnectedBlogForm = connect(null, mapDispatchToProps)(BlogForm)
+const ConnectedBlogForm = connect(mapStateToProps, mapDispatchToProps)(BlogForm)
 
 export default ConnectedBlogForm
