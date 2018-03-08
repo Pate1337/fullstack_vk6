@@ -16,7 +16,7 @@ class UserList extends React.Component {
             </tr>
           </tbody>
           {this.props.users.map(user =>
-            <User key={user.id} user={user} />
+            <User key={user.id} userUserList={user} />
           )}
         </table>
       </div>

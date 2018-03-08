@@ -14,7 +14,8 @@ import { removeLoggedUser } from './reducers/loggedUserReducer'
 import BlogList from './components/BlogList'
 import UserList from './components/UserList'
 import User from './components/User'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import Menu from './components/Menu'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 class App extends React.Component {
 
@@ -33,7 +34,7 @@ class App extends React.Component {
   }
 
   userById = (id) => {
-    console.log('userById App')
+    console.log('userById App. Parametrina saatu id: ' + id)
     let user
     this.props.users.forEach(u => {
       if (u.id === id) {
@@ -59,26 +60,26 @@ class App extends React.Component {
     console.log('this.props.loggedUser !== null Appissa')
     return (
       <div>
-      <Router>
-      <div className="logged">
-        <div>
-          <Link to="/users">Users</Link>
-        </div>
-        <Notification />
-        <div>{this.props.loggedUser.name} logged
-          <button onClick={this.logOut}>logout</button>
-        </div>
-        <div>
-          <Togglable buttonLabel="Lisää uusi blogi" ref={component => this.BlogForm = component}>
-            <BlogForm component={this.BlogForm} />
-          </Togglable>
-        </div>
-        <Route exact path="/users" render={() => <UserList />} />
-        <Route exact path="/users/:id" render={({match}) =>
-          <User user={this.userById(match.params.id)} />} />
-        <BlogList />
-      </div>
-      </Router>
+        <Router>
+          <div className="logged">
+            <div>
+              <h1>Blogi sovellus</h1>
+              <Menu />
+              {this.props.loggedUser.name} logged
+              <button onClick={this.logOut}>logout</button>
+            </div>
+            <Notification />
+            <div>
+              <Togglable buttonLabel="Lisää uusi blogi" ref={component => this.BlogForm = component}>
+                <BlogForm component={this.BlogForm} />
+              </Togglable>
+            </div>
+            <Route exact path="/users" render={() => <UserList />} />
+            <Route exact path="/users/:id" render={({match}) =>
+              <User userApp={this.userById(match.params.id)} />} />
+            <Route exact path="/blogs" render={() => <BlogList />} />
+          </div>
+        </Router>
       </div>
     )
   }
