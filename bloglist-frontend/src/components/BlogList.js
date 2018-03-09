@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Blog from './Blog'
+import { Table } from 'semantic-ui-react'
 
 class BlogList extends React.Component {
   render() {
@@ -8,9 +9,13 @@ class BlogList extends React.Component {
     return (
       <div>
         <h2>Blogs</h2>
-        {this.props.blogs.map(blog =>
-          <Blog key={blog.id} blogBlogList={blog} />
-        )}
+        <Table striped celled unstackable>
+          <Table.Body>
+            {this.props.blogs.map(blog =>
+              <Blog key={blog.id} blogBlogList={blog} />
+            )}
+          </Table.Body>
+        </Table>
       </div>
     )
   }
@@ -29,3 +34,10 @@ const mapStateToProps = (state) => {
 const ConnectedBlogList = connect(mapStateToProps)(BlogList)
 
 export default ConnectedBlogList
+
+/*<div>
+  <h2>Blogs</h2>
+  {this.props.blogs.map(blog =>
+    <Blog key={blog.id} blogBlogList={blog} />
+  )}
+</div>*/

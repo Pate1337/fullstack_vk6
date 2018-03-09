@@ -6,6 +6,7 @@ import { addLike } from '../reducers/blogReducer'
 import { deleteBlog } from '../reducers/blogReducer'
 import { Link } from 'react-router-dom'
 import { deleteBlogFromUser } from '../reducers/userReducer'
+import { Table } from 'semantic-ui-react'
 
 class Blog extends React.Component {
   constructor(props) {
@@ -71,22 +72,24 @@ class Blog extends React.Component {
       console.log('Blogiin saavuttu BlogLististä')
       const showDelete = { display: (this.props.user.id === blog.user._id) ? '' : 'none'}
       return (
-        <div style={blogStyle}>
-          <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
-            {blog.title} {blog.author}
-          </div>
-          <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
-            <Link to={`/blogs/${blog.id}`}>
-              {blog.title}</Link> by {blog.author}
-            <p>
-              likes {blog.likes}
-              <button onClick={() => this.handleLike(blog)}>like</button>
-            </p>
-            <div style={showDelete}>
-              <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+        <Table.Row>
+          <Table.Cell>
+            <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
+              {blog.title} {blog.author}
             </div>
-          </div>
-        </div>
+            <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
+              <Link to={`/blogs/${blog.id}`}>
+                {blog.title}</Link> by {blog.author}
+              <p>
+                likes {blog.likes}
+                <button onClick={() => this.handleLike(blog)}>like</button>
+              </p>
+              <div style={showDelete}>
+                <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+              </div>
+            </div>
+          </Table.Cell>
+        </Table.Row>
       )
     }
     const showDelete = { display: (this.props.user.id === this.props.blogApp.user._id) ? '' : 'none'}
@@ -133,3 +136,20 @@ const mapDispatchToProps = {
 const ConnectedBlog = connect(mapStateToProps, mapDispatchToProps)(Blog)
 
 export default ConnectedBlog
+
+/*<div style={blogStyle}>
+  <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
+    {blog.title} {blog.author}
+  </div>
+  <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
+    <Link to={`/blogs/${blog.id}`}>
+      {blog.title}</Link> by {blog.author}
+    <p>
+      likes {blog.likes}
+      <button onClick={() => this.handleLike(blog)}>like</button>
+    </p>
+    <div style={showDelete}>
+      <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+    </div>
+  </div>
+</div>*/

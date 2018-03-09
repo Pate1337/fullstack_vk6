@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { usersInitialization } from '../reducers/userReducer'
+import { Table, Label } from 'semantic-ui-react'
 
 class User extends React.Component {
   render() {
@@ -13,12 +14,10 @@ class User extends React.Component {
     } else if (this.props.userApp === undefined) {
       console.log('Useriin saavuttu UserLististä')
       return (
-        <tbody>
-          <tr>
-            <td><Link to={`/users/${this.props.userUserList.id}`}>{this.props.userUserList.username}</Link></td>
-            <td>{this.props.userUserList.blogs}</td>
-          </tr>
-        </tbody>
+        <Table.Row>
+          <Table.Cell><Link to={`/users/${this.props.userUserList.id}`}>{this.props.userUserList.username}</Link></Table.Cell>
+          <Table.Cell>{this.props.userUserList.blogs}</Table.Cell>
+        </Table.Row>
       )
     }
     console.log('Useriin saavuttu suoraan Appista')
@@ -59,3 +58,10 @@ const mapDispatchToProps = {
 const ConnectedUser = connect(mapStateToProps, mapDispatchToProps)(User)
 
 export default ConnectedUser
+
+/*<tbody>
+  <tr>
+    <td><Link to={`/users/${this.props.userUserList.id}`}>{this.props.userUserList.username}</Link></td>
+    <td>{this.props.userUserList.blogs}</td>
+  </tr>
+</tbody>*/

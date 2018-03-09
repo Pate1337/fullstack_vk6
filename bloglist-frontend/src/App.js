@@ -17,10 +17,11 @@ import UserList from './components/UserList'
 import User from './components/User'
 import Menu from './components/Menu'
 import Blog from './components/Blog'
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, HashRouter, Route, Link } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import PropTypes from 'prop-types'
 import LoggedBar from './components/LoggedBar'
+import { Container } from 'semantic-ui-react'
 
 class App extends React.Component {
 
@@ -67,7 +68,7 @@ class App extends React.Component {
       /*LoginFormia ei siis renderöidä uudestaan, koska tänne ei
       päästä jos loggedUser ei ole null*/
       return (
-        <div>
+        <Container>
           <Router>
             <div className="notLogged">
               <Notification />
@@ -77,12 +78,12 @@ class App extends React.Component {
               />
             </div>
           </Router>
-        </div>
+        </Container>
       )
     }
     console.log('this.props.loggedUser !== null Appissa')
     return (
-      <div>
+      <Container>
         <Router>
           <div className="logged">
             <div>
@@ -108,7 +109,7 @@ class App extends React.Component {
               <Blog blogApp={this.blogById(match.params.id)} />} />
           </div>
         </Router>
-      </div>
+      </Container>
     )
   }
 }

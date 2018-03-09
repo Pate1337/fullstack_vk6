@@ -87,7 +87,7 @@ export const addNewUser = (userObject) => {
   console.log('addNewUser userReducer')
   const formatUser = (user) => {
     return {
-      id: user.id,
+      id: user._id,
       username: user.username,
       name: user.name,
       blogs: user.blogs.length
