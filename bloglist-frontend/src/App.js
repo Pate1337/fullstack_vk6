@@ -1,7 +1,6 @@
 import React from 'react'
 import Notification from './components/Notification'
 import './index.css'
-import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
 import SignupForm from './components/SignupForm'
@@ -17,9 +16,7 @@ import UserList from './components/UserList'
 import User from './components/User'
 import Menu from './components/Menu'
 import Blog from './components/Blog'
-import { BrowserRouter as Router, HashRouter, Route, Link } from 'react-router-dom'
-import { createBrowserHistory } from 'history'
-import PropTypes from 'prop-types'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 import LoggedBar from './components/LoggedBar'
 import { Container } from 'semantic-ui-react'
 
@@ -88,18 +85,15 @@ class App extends React.Component {
           <div className="logged">
             <div>
               <h1>Blogi sovellus</h1>
-              <Menu />
               <div>
                 <Route path="/"
                 render={({history}) => <LoggedBar history={history} />} />
-
               </div>
+              <Menu />
             </div>
             <Notification />
             <div>
-              <Togglable buttonLabel="Lisää uusi blogi" ref={component => this.BlogForm = component}>
-                <BlogForm component={this.BlogForm} />
-              </Togglable>
+              <BlogForm />
             </div>
             <Route exact path="/users" render={() => <UserList />} />
             <Route exact path="/users/:id" render={({match}) =>

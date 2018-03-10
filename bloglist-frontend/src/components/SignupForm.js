@@ -2,9 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addSuccessNotification } from '../reducers/notificationReducer'
 import { addErrorNotification } from '../reducers/notificationReducer'
-import { addLoggedUser } from '../reducers/loggedUserReducer'
 import { addNewUser } from '../reducers/userReducer'
 import { Link } from 'react-router-dom'
+import { Form, Button, Icon } from 'semantic-ui-react'
 
 class SignupForm extends React.Component {
   constructor() {
@@ -28,6 +28,18 @@ class SignupForm extends React.Component {
       name: this.state.name,
       password: this.state.password
     }
+    if (user.username === '' || user.name === '') {
+      this.props.addErrorNotification('Kaikki kentät ovat pakollisia!')
+      setTimeout(() => {
+        this.props.addErrorNotification(null)
+      }, 5000)
+      this.setState({
+        username: '',
+        name: '',
+        password: ''
+      })
+      return null
+    }
     const response = await this.props.addNewUser(user)
     if (response !== "error") {
       /*await this.props.addLoggedUser({user: user.username, password: user.password})*/
@@ -38,7 +50,7 @@ class SignupForm extends React.Component {
       }, 5000)
       this.props.history.push('/')
     } else {
-      this.props.addErrorNotification('Kaikki kentät ovat pakollisia! Käyttäjätunnus voi myös olla varattu!')
+      this.props.addErrorNotification('Salasana oltava vähintään 3 merkkiä! Käyttäjätunnus voi myös olla varattu!')
       setTimeout(() => {
         this.props.addErrorNotification(null)
       }, 5000)
@@ -56,37 +68,46 @@ class SignupForm extends React.Component {
       <div>
         <h2>Create a new User</h2>
 
-        <form onSubmit={this.handleSignup}>
-          <div>
-            username:
+        <Form onSubmit={this.handleSignup}>
+          <Form.Field required>
+            <label>username:</label>
             <input
               type="text"
               name="username"
               value={this.state.username}
               onChange={this.handleFieldChange}
             />
-          </div>
-          <div>
-            name:
+          </Form.Field>
+          <Form.Field required>
+            <label>name:</label>
             <input
               type="text"
               name="name"
               value={this.state.name}
               onChange={this.handleFieldChange}
             />
-          </div>
-          <div>
-            password:
+          </Form.Field>
+          <Form.Field required>
+            <label>password:</label>
             <input
               type="password"
               name="password"
               value={this.state.password}
               onChange={this.handleFieldChange}
             />
-          </div>
-          <button type="submit">Create account</button>
-        </form>
-        <Link to="/">Back to login</Link>
+          </Form.Field>
+          <Button color='green' icon labelPosition='right' type="submit">
+            Create account
+            <Icon name='right arrow' />
+          </Button>
+        </Form>
+        <br/>
+        <div>
+          <Button icon labelPosition='left'>
+            <Link to="/">Back to login</Link>
+            <Icon name='left arrow' />
+          </Button>
+        </div>
       </div>
     )
   }

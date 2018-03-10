@@ -9,7 +9,7 @@ class BlogList extends React.Component {
     return (
       <div>
         <h2>Blogs</h2>
-        <Table striped celled unstackable>
+        <Table  striped celled unstackable selectable>
           <Table.Body>
             {this.props.blogs.map(blog =>
               <Blog key={blog.id} blogBlogList={blog} />

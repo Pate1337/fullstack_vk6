@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { usersInitialization } from '../reducers/userReducer'
-import { Table, Label } from 'semantic-ui-react'
+import { Table, Button, Icon } from 'semantic-ui-react'
 
 class User extends React.Component {
   render() {
@@ -24,8 +24,7 @@ class User extends React.Component {
     console.log('Blogien pituus: ' + this.props.blogs.length)
     return (
       <div>
-        <h2>{this.props.userApp.name}</h2>
-        <h3>Blogs added</h3>
+        <h2>Blogs added by {this.props.userApp.username}</h2>
         <ul>
           {this.props.blogs.map(blog => {
             if (blog.user._id === this.props.userApp.id) {
@@ -33,6 +32,12 @@ class User extends React.Component {
             }
           })}
         </ul>
+        <div>
+          <Button icon labelPosition='left'>
+            <Link to="/users">Back to users</Link>
+            <Icon name='left arrow' />
+          </Button>
+        </div>
       </div>
     )
   }

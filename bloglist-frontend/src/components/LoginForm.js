@@ -4,6 +4,7 @@ import { addSuccessNotification } from '../reducers/notificationReducer'
 import { addErrorNotification } from '../reducers/notificationReducer'
 import { addLoggedUser } from '../reducers/loggedUserReducer'
 import { Link } from 'react-router-dom'
+import { Form, Button, Icon } from 'semantic-ui-react'
 
 class LoginForm extends React.Component {
   constructor() {
@@ -50,28 +51,37 @@ class LoginForm extends React.Component {
       <div>
         <h2>Login to application</h2>
 
-        <form onSubmit={this.handleLogin}>
-          <div>
-            username:
+        <Form onSubmit={this.handleLogin}>
+          <Form.Field>
+            <label>username:</label>
             <input
               type="text"
               name="username"
               value={this.state.username}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <div>
-            password:
+          </Form.Field>
+          <Form.Field>
+            <label>password:</label>
             <input
               type="password"
               name="password"
               value={this.state.password}
               onChange={this.handleLoginFieldChange}
             />
-          </div>
-          <button type="submit">login</button>
-        </form>
-        <Link to="/signup">Luo uusi käyttäjätunnus</Link>
+          </Form.Field>
+          <Button color='green' icon labelPosition='right' type="submit">
+            Login
+            <Icon name='right arrow' />
+          </Button>
+        </Form>
+        <br/>
+        <div>
+          <Button icon labelPosition='right' type="submit">
+            <Link to="/signup">Luo uusi käyttäjätunnus</Link>
+            <Icon name='right arrow' />
+          </Button>
+        </div>
       </div>
     )
   }

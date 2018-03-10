@@ -1,19 +1,27 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { removeLoggedUser } from '../reducers/loggedUserReducer'
+import { Menu } from 'semantic-ui-react'
 
-const Menu = () => {
+const MenuBar = () => {
 
   const activeStyle = {
-    backgroundColor: 'rgb(0, 206, 96)'
+    backgroundColor: "grey"
   }
 
   return (
     <div>
-      <NavLink exact to="/" activeStyle={activeStyle}>Home</NavLink>&nbsp;
-      <NavLink exact to="/users" activeStyle={activeStyle}>Users</NavLink>&nbsp;
-      <NavLink exact to="/blogs" activeStyle={activeStyle}>Blogs</NavLink>
+      <Menu inverted>
+        <Menu.Item link>
+          <NavLink exact to="/" activeStyle={activeStyle}>Home</NavLink>&nbsp;
+        </Menu.Item>
+        <Menu.Item link>
+          <NavLink exact to="/users" activeStyle={activeStyle}>Users</NavLink>&nbsp;
+        </Menu.Item>
+        <Menu.Item link>
+          <NavLink exact to="/blogs" activeStyle={activeStyle}>Blogs</NavLink>
+        </Menu.Item>
+      </Menu>
+      <br/>
     </div>
   )
 
@@ -21,4 +29,4 @@ const Menu = () => {
 
 
 
-export default Menu
+export default MenuBar

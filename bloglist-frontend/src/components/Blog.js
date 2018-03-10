@@ -6,7 +6,7 @@ import { addLike } from '../reducers/blogReducer'
 import { deleteBlog } from '../reducers/blogReducer'
 import { Link } from 'react-router-dom'
 import { deleteBlogFromUser } from '../reducers/userReducer'
-import { Table } from 'semantic-ui-react'
+import { Table, Button, Icon, Label } from 'semantic-ui-react'
 
 class Blog extends React.Component {
   constructor(props) {
@@ -55,13 +55,7 @@ class Blog extends React.Component {
     const onlyShowTitleAndAuthor = { display: this.state.showAll ? 'none' : '' }
     /*Jos nyt sattuis käymään niin että delete näkyis muillekki,
     nii ei ne niitä poistaa voi ja saavat ilmotuksen*/
-    const blogStyle = {
-      paddingTop: 10,
-      paddingLeft: 2,
-      border: 'solid',
-      borderWidth: 1,
-      marginBottom: 5
-    }
+
     if (this.props.blogs.length === 0) {
       return (
         <div>LOADING :DDD</div>
@@ -73,19 +67,27 @@ class Blog extends React.Component {
       const showDelete = { display: (this.props.user.id === blog.user._id) ? '' : 'none'}
       return (
         <Table.Row>
-          <Table.Cell>
-            <div style={onlyShowTitleAndAuthor} onClick={this.toggleVisibility} className="titleAndAuthor">
-              {blog.title} {blog.author}
+          <Table.Cell style={onlyShowTitleAndAuthor}>
+            <div onClick={this.toggleVisibility} className="titleAndAuthor">
+              {blog.title} by {blog.author}
             </div>
-            <div style={showAllInfo} onClick={this.toggleVisibility} className="allFields">
-              <Link to={`/blogs/${blog.id}`}>
-                {blog.title}</Link> by {blog.author}
-              <p>
-                likes {blog.likes}
-                <button onClick={() => this.handleLike(blog)}>like</button>
-              </p>
+          </Table.Cell>
+          <Table.Cell style={showAllInfo}>
+            <div onClick={this.toggleVisibility} className="allFields">
+              <div>
+                <Link to={`/blogs/${blog.id}`}>
+                  {blog.title}</Link> by {blog.author}&nbsp;
+                <Button as='div' labelPosition='right' onClick={() => this.handleLike(blog)}>
+                  <Button basic color='blue'>
+                    <Icon name='heart' />
+                    Like
+                  </Button>
+                  <Label as='a' basic color='blue' pointing='left'>{blog.likes}</Label>
+                </Button>
+              </div>
+              <br/>
               <div style={showDelete}>
-                <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+                <Button basic color='red' onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</Button>
               </div>
             </div>
           </Table.Cell>
@@ -104,14 +106,26 @@ class Blog extends React.Component {
         </p>
         <p>Lisääjä {blog.user.name}</p>
         <p>Lisääjän id {blog.user._id}</p>
-        <p>
-          likes {blog.likes}
-          <button onClick={() => this.handleLike(blog)}>like</button>
-        </p>
+        <div>
+          <Button as='div' labelPosition='right' onClick={() => this.handleLike(blog)}>
+            <Button basic color='blue'>
+              <Icon name='heart' />
+              Like
+            </Button>
+            <Label as='a' basic color='blue' pointing='left'>{blog.likes}</Label>
+          </Button>
+        </div>
+        <br/>
         <div style={showDelete}>
-          <button onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</button>
+          <Button basic color='red' onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</Button>
         </div>
         <p>Halusin pitää tuon mahdollisuuden nähdä enemmän tietoa painamalla blogin nimeä.</p>
+        <div>
+          <Button icon labelPosition='left'>
+            <Link to="/blogs">Back to blogs</Link>
+            <Icon name='left arrow' />
+          </Button>
+        </div>
       </div>
     )
   }

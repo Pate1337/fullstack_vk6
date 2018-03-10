@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { removeLoggedUser } from '../reducers/loggedUserReducer'
+import { Button } from 'semantic-ui-react'
 
 class LoggedBar extends React.Component {
 
@@ -17,7 +18,7 @@ class LoggedBar extends React.Component {
     return (
       <div>
         {this.props.user.name} logged
-        <button onClick={this.logOut}>logout</button>
+        <Button onClick={this.logOut}>logout</Button>
       </div>
     )
   }
