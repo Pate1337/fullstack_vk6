@@ -101,7 +101,7 @@ class BlogForm extends React.Component {
         <h2>Lisää uusi blogi</h2>
         <Form onSubmit={this.handleSubmit}>
           <Form.Field required>
-            <label>title:</label>
+            <label>Otsikko:</label>
             <input
               type="text"
               name="title"
@@ -110,7 +110,7 @@ class BlogForm extends React.Component {
             />
           </Form.Field>
           <Form.Field required>
-            <label>author:</label>
+            <label>Tekijä:</label>
             <input
               type="text"
               name="author"
@@ -119,7 +119,7 @@ class BlogForm extends React.Component {
             />
           </Form.Field>
           <Form.Field required>
-            <label>url:</label>
+            <label>Url:</label>
             <input
               type="text"
               name="url"
@@ -130,11 +130,11 @@ class BlogForm extends React.Component {
 
           <Button.Group>
             <Button type="submit" positive>
-              Add Blog
+              Lisää blogi
             </Button>
-            <Button.Or />
+            <Button.Or text='Tai' />
             <Button type="button" onClick={this.toggleVisibility}>
-              Cancel
+              Peruuta
             </Button>
           </Button.Group>
         </Form>

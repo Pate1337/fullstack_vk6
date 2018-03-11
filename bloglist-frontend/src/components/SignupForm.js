@@ -66,11 +66,11 @@ class SignupForm extends React.Component {
     console.log('Renderöidään SignupForm')
     return (
       <div>
-        <h2>Create a new User</h2>
+        <h2>Luo uusi käyttäjä</h2>
 
         <Form onSubmit={this.handleSignup}>
           <Form.Field required>
-            <label>username:</label>
+            <label>Käyttäjätunnus:</label>
             <input
               type="text"
               name="username"
@@ -79,7 +79,7 @@ class SignupForm extends React.Component {
             />
           </Form.Field>
           <Form.Field required>
-            <label>name:</label>
+            <label>Nimi:</label>
             <input
               type="text"
               name="name"
@@ -88,7 +88,7 @@ class SignupForm extends React.Component {
             />
           </Form.Field>
           <Form.Field required>
-            <label>password:</label>
+            <label>Salasana:</label>
             <input
               type="password"
               name="password"
@@ -97,14 +97,14 @@ class SignupForm extends React.Component {
             />
           </Form.Field>
           <Button color='green' icon labelPosition='right' type="submit">
-            Create account
+            Luo käyttäjätili
             <Icon name='right arrow' />
           </Button>
         </Form>
         <br/>
         <div>
           <Button icon labelPosition='left'>
-            <Link to="/">Back to login</Link>
+            <Link to="/">Takaisin sisäänkirjautumiseen</Link>
             <Icon name='left arrow' />
           </Button>
         </div>

@@ -41,7 +41,7 @@ class Blog extends React.Component {
           this.props.addSuccessNotification(null)
         }, 5000)
       } else {
-        this.props.addErrorNotification(`Can't remove other user's blogs!`)
+        this.props.addErrorNotification(`Et voi poistaa muiden käyttäjien blogeja!`)
         setTimeout(() => {
           this.props.addErrorNotification(null)
         }, 5000)
@@ -80,14 +80,14 @@ class Blog extends React.Component {
                 <Button as='div' labelPosition='right' onClick={() => this.handleLike(blog)}>
                   <Button basic color='blue'>
                     <Icon name='heart' />
-                    Like
+                    Tykkää
                   </Button>
                   <Label as='a' basic color='blue' pointing='left'>{blog.likes}</Label>
                 </Button>
               </div>
               <br/>
               <div style={showDelete}>
-                <Button basic color='red' onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</Button>
+                <Button basic color='red' onClick={() => this.handleDelete(blog)} id={blog.id}>Poista</Button>
               </div>
             </div>
           </Table.Cell>
@@ -110,19 +110,19 @@ class Blog extends React.Component {
           <Button as='div' labelPosition='right' onClick={() => this.handleLike(blog)}>
             <Button basic color='blue'>
               <Icon name='heart' />
-              Like
+              Tykkää
             </Button>
             <Label as='a' basic color='blue' pointing='left'>{blog.likes}</Label>
           </Button>
         </div>
         <br/>
         <div style={showDelete}>
-          <Button basic color='red' onClick={() => this.handleDelete(blog)} id={blog.id}>Delete</Button>
+          <Button basic color='red' onClick={() => this.handleDelete(blog)} id={blog.id}>Poista</Button>
         </div>
         <p>Halusin pitää tuon mahdollisuuden nähdä enemmän tietoa painamalla blogin nimeä.</p>
         <div>
           <Button icon labelPosition='left'>
-            <Link to="/blogs">Back to blogs</Link>
+            <Link to="/blogs">Takaisin blogeihin</Link>
             <Icon name='left arrow' />
           </Button>
         </div>

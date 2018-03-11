@@ -49,11 +49,11 @@ class LoginForm extends React.Component {
     console.log('Renderöidään LoginForm')
     return (
       <div>
-        <h2>Login to application</h2>
+        <h2>Kirjaudu sovellukseen</h2>
 
         <Form onSubmit={this.handleLogin}>
           <Form.Field>
-            <label>username:</label>
+            <label>Käyttäjätunnus:</label>
             <input
               type="text"
               name="username"
@@ -62,7 +62,7 @@ class LoginForm extends React.Component {
             />
           </Form.Field>
           <Form.Field>
-            <label>password:</label>
+            <label>Salasana:</label>
             <input
               type="password"
               name="password"
@@ -71,7 +71,7 @@ class LoginForm extends React.Component {
             />
           </Form.Field>
           <Button color='green' icon labelPosition='right' type="submit">
-            Login
+            Kirjaudu sisään
             <Icon name='right arrow' />
           </Button>
         </Form>

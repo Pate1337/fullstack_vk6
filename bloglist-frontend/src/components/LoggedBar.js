@@ -17,8 +17,11 @@ class LoggedBar extends React.Component {
     console.log('Renderöidään LoggedBar')
     return (
       <div>
-        {this.props.user.name} logged
-        <Button onClick={this.logOut}>logout</Button>
+        <div>
+          {this.props.user.name} kirjautunut&nbsp;
+          <Button onClick={this.logOut}>Kirjaudu ulos</Button>
+        </div>
+        <br />
       </div>
     )
   }

@@ -11,8 +11,8 @@ class UserList extends React.Component {
         <Table striped celled unstackable>
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Users</Table.HeaderCell>
-              <Table.HeaderCell>Blogs added</Table.HeaderCell>
+              <Table.HeaderCell>Käyttäjät</Table.HeaderCell>
+              <Table.HeaderCell>Lisätyt blogit</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>

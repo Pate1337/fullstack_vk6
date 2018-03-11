@@ -19,6 +19,7 @@ import Blog from './components/Blog'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import LoggedBar from './components/LoggedBar'
 import { Container } from 'semantic-ui-react'
+import BrowserDetection from 'react-browser-detection'
 
 class App extends React.Component {
 
@@ -75,6 +76,7 @@ class App extends React.Component {
               />
             </div>
           </Router>
+          <Selain />
         </Container>
       )
     }
@@ -106,6 +108,35 @@ class App extends React.Component {
       </Container>
     )
   }
+}
+
+const Selain = () => {
+  let s = ''
+  if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 )
+ {
+     s = 'Opera'
+ }
+ else if(navigator.userAgent.indexOf("Chrome") != -1 )
+ {
+     s = 'Chrome'
+ }
+ else if(navigator.userAgent.indexOf("Safari") != -1)
+ {
+     s = 'Safari'
+ }
+ else if(navigator.userAgent.indexOf("Firefox") != -1 )
+ {
+      s = 'Firefox'
+ }
+ else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10
+ {
+   s = 'IE'
+ }
+ else
+ {
+    s = 'unknown'
+ }
+ return (<div>Käytät selainta: {s}. Firefoxin kanssa jotkin painikkeet eivät toimi. Käytä Chromea.</div>)
 }
 
 const mapStateToProps = (state) => {

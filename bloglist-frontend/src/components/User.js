@@ -24,7 +24,7 @@ class User extends React.Component {
     console.log('Blogien pituus: ' + this.props.blogs.length)
     return (
       <div>
-        <h2>Blogs added by {this.props.userApp.username}</h2>
+        <h2>Käyttäjän {this.props.userApp.username} lisäämät blogit</h2>
         <ul>
           {this.props.blogs.map(blog => {
             if (blog.user._id === this.props.userApp.id) {
@@ -34,7 +34,7 @@ class User extends React.Component {
         </ul>
         <div>
           <Button icon labelPosition='left'>
-            <Link to="/users">Back to users</Link>
+            <Link to="/users">Takaisin käyttäjiin</Link>
             <Icon name='left arrow' />
           </Button>
         </div>

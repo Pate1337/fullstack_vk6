@@ -12,13 +12,13 @@ const MenuBar = () => {
     <div>
       <Menu inverted>
         <Menu.Item link>
-          <NavLink exact to="/" activeStyle={activeStyle}>Home</NavLink>&nbsp;
+          <NavLink exact to="/" activeStyle={activeStyle}>Etusivu</NavLink>&nbsp;
         </Menu.Item>
         <Menu.Item link>
-          <NavLink exact to="/users" activeStyle={activeStyle}>Users</NavLink>&nbsp;
+          <NavLink exact to="/users" activeStyle={activeStyle}>Käyttäjät</NavLink>&nbsp;
         </Menu.Item>
         <Menu.Item link>
-          <NavLink exact to="/blogs" activeStyle={activeStyle}>Blogs</NavLink>
+          <NavLink exact to="/blogs" activeStyle={activeStyle}>Blogit</NavLink>
         </Menu.Item>
       </Menu>
       <br/>
